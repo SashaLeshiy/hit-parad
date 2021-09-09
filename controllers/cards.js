@@ -31,14 +31,17 @@ module.exports.createCard = (req, res, next) => {
   const owner = req.user._id;
   let title;
   let image = '';
-
-  Card.find({ link })
+  Card.findOne({ link })
     .then((song) => {
       if (song) {
-        const err = new Error('Композиция уже добавлена');
+        const err = new Error('Есть уже такая песня!');
         err.statusCode = 400;
         next(err);
-      } else if (!song) {
+      }
+      return song;
+    })
+    .then((song) => {
+      if (!song) {
         request(`${link}`)
           .then((html) => {
             const $ = cheerio.load(html);
@@ -62,8 +65,8 @@ module.exports.createCard = (req, res, next) => {
           });
       }
     })
-    .catch(() => {
-      next();
+    .catch((err) => {
+      console.log(err);
     });
 };
 
