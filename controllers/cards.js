@@ -1,3 +1,5 @@
+const request = require('request-promise');
+const cheerio = require('cheerio');
 const Card = require('../models/card');
 
 module.exports.getCards = (req, res, next) => {
@@ -27,11 +29,31 @@ module.exports.getCardId = (req, res, next) => {
 module.exports.createCard = (req, res, next) => {
   const { link } = req.body;
   const owner = req.user._id;
+  let title;
+  let image = '';
 
-  Card.create({ link, owner })
-    .then((card) => res.send(card))
+  request(`${link}`)
+    .then((html) => {
+      const $ = cheerio.load(html);
+      // eslint-disable-next-line prefer-destructuring
+      title = $('title').text().split('.')[0];
+      image = $('.entity-cover__image').attr('src');
+      console.log(title, image);
+    })
+    .then(() => {
+      Card.create({
+        link, owner, title, image,
+      })
+        .then((card) => {
+          console.log(card);
+          res.send(card);
+        })
+        .catch((err) => {
+          next(err);
+        });
+    })
     .catch((err) => {
-      next(err);
+      console.log(err);
     });
 };
 

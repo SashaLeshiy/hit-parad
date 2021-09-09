@@ -73,22 +73,22 @@ module.exports.createUser = (req, res, next) => {
     });
 };
 
-// module.exports.changeProfile = (req, res, next) => {
-//   const { name, about } = req.body;
-//   User.findByIdAndUpdate(req.user._id, { name, about }, { runValidators: true, new: true })
-//     .then((profile) => {
-//       if (!profile) {
-//         const err = new Error('Пользователь не найден');
-//         err.statusCode = 404;
-//         next(err);
-//       } else {
-//         res.send(profile);
-//       }
-//     })
-//     .catch((err) => {
-//       next(err);
-//     });
-// };
+module.exports.changeProfile = (req, res, next) => {
+  const { name } = req.body;
+  User.findByIdAndUpdate(req.user._id, { name }, { runValidators: true, new: true })
+    .then((profile) => {
+      if (!profile) {
+        const err = new Error('Пользователь не найден');
+        err.statusCode = 404;
+        next(err);
+      } else {
+        res.send(profile);
+      }
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
 
 // module.exports.changeAvatar = (req, res, next) => {
 //   const { avatar } = req.body;

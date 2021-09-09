@@ -1,17 +1,17 @@
 const mongoose = require('mongoose');
 
 const cardSchema = new mongoose.Schema({
-  // name: {
-  //   type: String,
-  //   required: true,
-  //   minlength: 2,
-  //   maxlength: 30,
-  // },
+  title: {
+    type: String,
+  },
   link: {
     type: String,
     required: true,
-    match: [/^(http|https):\/\/(www\.)?([\da-z.-]+)\.([a-z.]{2,6})([/\w\-._~:/?#[\]@!$&'()*+,;=]*)*#?$/,
+    match: [/^(https:\/\/)(music.yandex.ru\/album)\/([0-9]+)\/(track)\/([0-9]+)/,
       'invalid url'],
+  },
+  image: {
+    type: String,
   },
   owner: {
     type: mongoose.ObjectId,
