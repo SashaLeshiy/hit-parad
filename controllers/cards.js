@@ -32,28 +32,38 @@ module.exports.createCard = (req, res, next) => {
   let title;
   let image = '';
 
-  request(`${link}`)
-    .then((html) => {
-      const $ = cheerio.load(html);
-      // eslint-disable-next-line prefer-destructuring
-      title = $('title').text().split('.')[0];
-      image = $('.entity-cover__image').attr('src');
-      console.log(title, image);
+  Card.find({ link })
+    .then((song) => {
+      if (song) {
+        const err = new Error('Композиция уже добавлена');
+        err.statusCode = 400;
+        next(err);
+      } else if (!song) {
+        request(`${link}`)
+          .then((html) => {
+            const $ = cheerio.load(html);
+            // eslint-disable-next-line prefer-destructuring
+            title = $('title').text().split('.')[0];
+            image = $('.entity-cover__image').attr('src');
+          })
+          .then(() => {
+            Card.create({
+              link, owner, title, image,
+            })
+              .then((card) => {
+                res.send(card);
+              })
+              .catch((err) => {
+                next(err);
+              });
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
     })
-    .then(() => {
-      Card.create({
-        link, owner, title, image,
-      })
-        .then((card) => {
-          console.log(card);
-          res.send(card);
-        })
-        .catch((err) => {
-          next(err);
-        });
-    })
-    .catch((err) => {
-      console.log(err);
+    .catch(() => {
+      next();
     });
 };
 
