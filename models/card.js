@@ -13,6 +13,9 @@ const cardSchema = new mongoose.Schema({
   image: {
     type: String,
   },
+  frameSong: {
+    type: String,
+  },
   owner: {
     type: mongoose.ObjectId,
     ref: 'user',

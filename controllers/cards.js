@@ -50,8 +50,10 @@ module.exports.createCard = (req, res, next) => {
             image = $('.entity-cover__image').attr('src');
           })
           .then(() => {
+            const songFrame = link.split('/');
+            const frameSong = `${songFrame[0]}//${songFrame[2]}/iframe/#track/${songFrame[6]}/${songFrame[4]}`;
             Card.create({
-              link, owner, title, image,
+              link, owner, title, image, frameSong,
             })
               .then((card) => {
                 res.send(card);
