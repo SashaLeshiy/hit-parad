@@ -125,6 +125,29 @@ module.exports.likeCard = (req, res, next) => {
     });
 };
 
+module.exports.listenCard = (req, res, next) => {
+  Card.findByIdAndUpdate(req.params.cardId,
+    { $addToSet: { listen: req.user._id } },
+    { new: true })
+    .then((card) => {
+      if (!card) {
+        const err = new Error('Не найдено');
+        err.statusCode = 404;
+        next(err);
+      } else {
+        res.send(card);
+      }
+    })
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        const error = new Error('Некорректные данные');
+        error.statusCode = 400;
+        next(error);
+      }
+      next(err);
+    });
+};
+
 module.exports.dislikeCard = (req, res, next) => {
   Card.findByIdAndUpdate(
     req.params.cardId,

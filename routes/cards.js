@@ -7,6 +7,7 @@ const {
   createCard,
   deleteCard,
   likeCard,
+  listenCard,
   dislikeCard,
 } = require('../controllers/cards');
 
@@ -30,9 +31,17 @@ router.put('/cards/:cardId/likes', auth, celebrate({
     cardId: Joi.string().hex().length(24),
   }),
 }), likeCard);
+
+router.put('/cards/:cardId/listen', auth, celebrate({
+  params: Joi.object().keys({
+    cardId: Joi.string().hex().length(24),
+  }),
+}), listenCard);
+
 router.delete('/cards/:cardId/likes', auth, celebrate({
   params: Joi.object().keys({
     cardId: Joi.string().hex().length(24),
   }),
 }), dislikeCard);
+
 module.exports = router;
