@@ -16,6 +16,10 @@ const cardSchema = new mongoose.Schema({
   frameSong: {
     type: String,
   },
+  rating: {
+    type: Number,
+    default: 0,
+  },
   owner: {
     type: mongoose.ObjectId,
     ref: 'user',

@@ -11,7 +11,7 @@ const {
   dislikeCard,
 } = require('../controllers/cards');
 
-router.get('/cards', auth, getCards);
+router.get('/cards', getCards);
 
 router.post('/cards', auth, celebrate({
   body: Joi.object().keys({
