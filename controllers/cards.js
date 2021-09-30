@@ -103,7 +103,6 @@ module.exports.deleteCard = (req, res, next) => {
 };
 
 module.exports.likeCard = (req, res, next) => {
-  console.log(req);
   Card.findByIdAndUpdate(req.params.cardId,
     { $addToSet: { likes: req.user._id }, $inc: { rating: 3 } },
     { new: true })
