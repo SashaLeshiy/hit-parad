@@ -20,19 +20,7 @@ const userSchema = new mongoose.Schema({
     maxlength: 30,
     default: 'James Hetfield',
   },
-  // about: {
-  //   type: String,
-  //   minlength: 2,
-  //   maxlength: 30,
-  //   default: 'Исследователь',
-  // },
-  // avatar: {
-  //   type: String,
-  //   match:
-  //  [/^(http|https):\/\/(www\.)?([\da-z.-]+)\.([a-z.]{2,6})([/\w\-._~:/?#[\]@!$&'()*+,;=]*)*#?$/,
-  //     'invalid avatar'],
-  //   default: 'https://pictures.s3.yandex.net/resources/jacques-cousteau_1604399756.png',
-  // },
+
 });
 
 userSchema.statics.findUserByCredentials = function compareDataUser(email, password, next) {

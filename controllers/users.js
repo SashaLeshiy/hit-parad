@@ -52,15 +52,11 @@ module.exports.createUser = (req, res, next) => {
       email: req.body.email,
       password: hash,
       name: req.body.name,
-      // about: req.body.about,
-      // avatar: req.body.avatar,
     }))
     .then((user) => res.send({
       data: {
         name: user.name,
         email: user.email,
-        // avatar: user.avatar,
-        // about: user.about,
       },
     }))
     .catch((err) => {
@@ -89,23 +85,6 @@ module.exports.changeProfile = (req, res, next) => {
       next(err);
     });
 };
-
-// module.exports.changeAvatar = (req, res, next) => {
-//   const { avatar } = req.body;
-//   User.findByIdAndUpdate(req.user._id, { avatar }, { runValidators: true, new: true })
-//     .then((profile) => {
-//       if (!profile) {
-//         const err = new Error('Пользователь не найден');
-//         err.statusCode = 404;
-//         next(err);
-//       } else {
-//         res.send(profile);
-//       }
-//     })
-//     .catch((err) => {
-//       next(err);
-//     });
-// };
 
 module.exports.login = (req, res, next) => {
   const { email, password } = req.body;

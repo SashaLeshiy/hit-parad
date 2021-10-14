@@ -15,7 +15,6 @@ router.get('/cards', getCards);
 
 router.post('/cards', auth, celebrate({
   body: Joi.object().keys({
-    // name: Joi.string().required().min(2).max(30),
     link: Joi.string().required().regex(/^(https:\/\/)(music.yandex.ru\/album)\/([0-9]+)\/(track)\/([0-9]+)/),
   }),
 }), createCard);
