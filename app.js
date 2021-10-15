@@ -29,7 +29,7 @@ app.use(requestLogger);
 
 app.use(cors({
   origin: [
-    'http://localhost:8080',
+    'https://hitallica.netlify.app',
   ],
   credentials: true,
 }));
