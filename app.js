@@ -31,6 +31,7 @@ app.use(cors({
   origin: [
     'https://hitallica.netlify.app',
     'http://hitallica.netlify.app',
+    'http://localhost:8080',
   ],
   credentials: true,
 }));
