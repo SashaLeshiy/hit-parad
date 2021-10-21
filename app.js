@@ -27,12 +27,16 @@ mongoose.connect(MONGO_URI, {
 
 app.use(requestLogger);
 
+// app.use(cors({
+//   origin: [
+//     'https://hitallica.netlify.app',
+//     'http://hitallica.netlify.app',
+//   ],
+//   credentials: true,
+// }));
+
 app.use(cors({
-  origin: [
-    'https://hitallica.netlify.app',
-    'http://hitallica.netlify.app',
-  ],
-  credentials: true,
+  origin: false,
 }));
 
 app.post('/signin', cors(), celebrate({
