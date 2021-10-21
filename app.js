@@ -30,6 +30,7 @@ app.use(requestLogger);
 app.use(cors({
   origin: [
     'https://hitallica.netlify.app',
+    'http://hitallica.netlify.app',
   ],
   credentials: true,
 }));
