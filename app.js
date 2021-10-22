@@ -33,7 +33,10 @@ app.use(cors({
     'http://hitallica.netlify.app',
     'http://localhost:8080',
   ],
+  allowedHeaders: ['Content-Type', 'Authorization',
+    'Access-Control-Allow-Methods', 'Access-Control-Request-Headers'],
   credentials: true,
+  enablePreflight: true,
 }));
 
 app.post('/signin', cors(), celebrate({
@@ -48,11 +51,6 @@ app.post('/signup', celebrate({
     email: Joi.string().required().email(),
     password: Joi.string().required(),
     name: Joi.string().min(2).max(30),
-    // about: Joi.string().min(2).max(30),
-    // avatar:
-    // Joi.string()
-    // .regex
-  // (/^(http|https):\/\/(www\.)?([\da-z.-]+)\.([a-z.]{2,6})([/\w\-._~:/?#[\]@!$&'()*+,;=]*)*#?$/),
   }),
 }), createUser);
 
