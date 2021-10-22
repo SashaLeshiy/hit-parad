@@ -34,7 +34,8 @@ app.use(cors({
     'http://localhost:8080',
   ],
   allowedHeaders: ['Content-Type', 'Authorization',
-    'Access-Control-Allow-Methods', 'Access-Control-Request-Headers'],
+    'Access-Control-Allow-Methods', 'Access-Control-Request-Headers',
+    'Access-Control-Allow-Origin'],
   credentials: true,
   enablePreflight: true,
 }));
