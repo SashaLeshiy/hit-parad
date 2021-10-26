@@ -50,7 +50,7 @@ module.exports.createCard = (req, res, next) => {
             image = $('.entity-cover__image').attr('src');
           })
           .then(() => {
-            const re = /\/?/;
+            const re = /[/?]/;
             const songFrame = link.split(re);
             console.log(songFrame);
             const frameSong = `${songFrame[0]}//${songFrame[2]}/iframe/#track/${songFrame[6]}/${songFrame[4]}`;
