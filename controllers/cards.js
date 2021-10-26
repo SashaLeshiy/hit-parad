@@ -51,6 +51,7 @@ module.exports.createCard = (req, res, next) => {
           })
           .then(() => {
             const songFrame = link.split(/\/\?/);
+			console.log('1111');
             console.log(songFrame);
             const frameSong = `${songFrame[0]}//${songFrame[2]}/iframe/#track/${songFrame[6]}/${songFrame[4]}`;
             Card.create({
