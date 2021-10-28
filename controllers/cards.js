@@ -47,7 +47,7 @@ module.exports.createCard = (req, res, next) => {
             const $ = cheerio.load(html);
             // eslint-disable-next-line prefer-destructuring
             title = $('title').text().split('.')[0];
-            image = $('.entity-cover__image').attr('src');
+            image = $('.entity-cover__image').attr('src').replace(/200x200/gi, '400x400');
           })
           .then(() => {
             const songFrame = link.split(/\?|\//);
