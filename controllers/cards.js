@@ -126,9 +126,15 @@ module.exports.likeCard = (req, res, next) => {
 };
 
 module.exports.listenCard = (req, res, next) => {
-  Card.findByIdAndUpdate(req.params.cardId,
-    { $addToSet: { listen: req.user._id }, $inc: { rating: 1 } },
-    { new: true })
+  Card.findOneAndUpdate({ _id: req.params.cardId, listen: { $elemMatch: { user: req.user._id } } },
+    {
+      'listen.$.user': req.user._id, 'listen.$.date': Date.now(),
+      // $inc: { rating: 1 },
+    },
+    // $addToSet: { listen: { user: req.user._id, date: Date.now() } },
+    { upsert: true })
+    // new Date(date) - new Date(Date.now()) >= 24
+    //   ? { $inc: { rating: 1 } } : { $inc: { rating: 0 } },
     .then((card) => {
       if (!card) {
         const err = new Error('Не найдено');
