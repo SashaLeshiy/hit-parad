@@ -21,4 +21,3 @@
 ## Ссылки
 - Backend размещен у хостинг провайдера
 - Frontend - https://hitallica.netlify.app репозиторий - https://github.com/SashaLeshiy/hit-parad-front
-
