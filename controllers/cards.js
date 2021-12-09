@@ -184,14 +184,13 @@ module.exports.listenCard = (req, res, next) => {
     })
     .then(() => { // получаем новую карточку и отдаем на рендеринг
       Card.findOne({ _id: req.params.cardId })
-        .then((card) => {
-          if (!card) {
+        .then((result) => {
+          if (!result) {
             const err = new Error('Не найдено');
             err.statusCode = 404;
             next(err);
           } else {
-            console.log(card);
-            res.send(card);
+            res.send(result);
           }
         })
         .catch((err) => {
