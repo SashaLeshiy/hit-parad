@@ -31,7 +31,7 @@ const cardSchema = new mongoose.Schema({
     default: [],
   },
   listen: {
-    type: [mongoose.ObjectId],
+    type: [{ user: mongoose.ObjectId, date: Date }],
     ref: 'user',
     default: [],
   },
