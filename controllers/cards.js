@@ -126,22 +126,55 @@ module.exports.likeCard = (req, res, next) => {
 };
 
 module.exports.listenCard = (req, res, next) => {
-  Card.findOneAndUpdate({ _id: req.params.cardId, listen: { $elemMatch: { user: req.user._id } } },
-    {
-      'listen.$.user': req.user._id, 'listen.$.date': Date.now(),
-      // $inc: { rating: 1 },
-    },
-    // $addToSet: { listen: { user: req.user._id, date: Date.now() } },
-    { upsert: true })
-    // new Date(date) - new Date(Date.now()) >= 24
-    //   ? { $inc: { rating: 1 } } : { $inc: { rating: 0 } },
+  Card.find({ _id: req.params.cardId, 'listen.user': req.user._id })
     .then((card) => {
-      if (!card) {
-        const err = new Error('Не найдено');
-        err.statusCode = 404;
-        next(err);
+      if (card.length === 0) {
+        Card.updateOne({ _id: req.params.cardId },
+          {
+            $addToSet: { listen: { user: req.user._id, date: Date.now() } },
+            $inc: { rating: 1 },
+          },
+          { new: true })
+          .then(() => {
+            if (!card) {
+              const err = new Error('Не найдено');
+              err.statusCode = 404;
+              next(err);
+            } else {
+              res.send(card);
+            }
+          })
+          .catch((err) => {
+            if (err.name === 'CastError') {
+              const error = new Error('Некорректные данные');
+              error.statusCode = 400;
+              next(error);
+            }
+            next(err);
+          });
       } else {
-        res.send(card);
+        Card.updateOne({ _id: req.params.cardId, 'listen.user': req.user._id },
+          {
+            $set: { 'listen.$.date': Date.now() },
+          },
+          { new: true })
+          .then(() => {
+            if (!card) {
+              const err = new Error('Не найдено');
+              err.statusCode = 404;
+              next(err);
+            } else {
+              res.send(card);
+            }
+          })
+          .catch((err) => {
+            if (err.name === 'CastError') {
+              const error = new Error('Некорректные данные');
+              error.statusCode = 400;
+              next(error);
+            }
+            next(err);
+          });
       }
     })
     .catch((err) => {
