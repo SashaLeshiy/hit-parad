@@ -126,10 +126,10 @@ module.exports.likeCard = (req, res, next) => {
 };
 
 module.exports.listenCard = (req, res, next) => {
-  Card.find({ _id: req.params.cardId, 'listen.user': req.user._id })
+  Card.find({ _id: req.params.cardId, 'listen.user': req.user._id }) // выборка юзера
     .then((card) => {
       if (card.length === 0) {
-        Card.updateOne({ _id: req.params.cardId },
+        Card.findByIdAndUpdate(req.params.cardId, // если нет записываем
           {
             $addToSet: { listen: { user: req.user._id, date: Date.now() } },
             $inc: { rating: 1 },
@@ -140,8 +140,6 @@ module.exports.listenCard = (req, res, next) => {
               const err = new Error('Не найдено');
               err.statusCode = 404;
               next(err);
-            } else {
-              res.send(card);
             }
           })
           .catch((err) => {
@@ -152,19 +150,26 @@ module.exports.listenCard = (req, res, next) => {
             }
             next(err);
           });
-      } else {
-        Card.updateOne({ _id: req.params.cardId, 'listen.user': req.user._id },
-          {
-            $set: { 'listen.$.date': Date.now() },
+      } else { // юзер есть, смотрим дату не раньше суток и тогда + в рейтинг и перезаписываем дату
+        const dateNow = new Date(Date.now() - 24 * 60 * 60 * 1000);
+        Card.updateOne({
+          _id: req.params.cardId,
+          listen: {
+            $elemMatch: {
+              user: req.user._id,
+              date: { $lte: dateNow },
+            },
           },
-          { new: true })
+        },
+        {
+          $set: { 'listen.$.date': Date.now() },
+          $inc: { rating: 1 },
+        })
           .then(() => {
             if (!card) {
               const err = new Error('Не найдено');
               err.statusCode = 404;
               next(err);
-            } else {
-              res.send(card);
             }
           })
           .catch((err) => {
@@ -176,6 +181,27 @@ module.exports.listenCard = (req, res, next) => {
             next(err);
           });
       }
+    })
+    .then(() => { // получаем новую карточку и отдаем на рендеринг
+      Card.findOne({ _id: req.params.cardId })
+        .then((card) => {
+          if (!card) {
+            const err = new Error('Не найдено');
+            err.statusCode = 404;
+            next(err);
+          } else {
+            console.log(card);
+            res.send(card);
+          }
+        })
+        .catch((err) => {
+          if (err.name === 'CastError') {
+            const error = new Error('Некорректные данные');
+            error.statusCode = 400;
+            next(error);
+          }
+          next(err);
+        });
     })
     .catch((err) => {
       if (err.name === 'CastError') {
