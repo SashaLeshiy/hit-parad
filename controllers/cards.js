@@ -187,13 +187,13 @@ module.exports.listenCard = (req, res, next) => {
     .then(() => { // получаем новую карточку и отдаем на рендеринг
       Card.findOne({ _id: req.params.cardId })
         .then((result) => {
-          // if (!result) {
-          //   const err = new Error('Не найдено');
-          //   err.statusCode = 404;
-          //   return next(err);
-          // } else {
-          res.send(result);
-          // }
+          if (!result) {
+            const err = new Error('Не найдено');
+            err.statusCode = 404;
+            next(err);
+          } else {
+            res.send(result);
+          }
         })
         .catch((err) => {
           if (err.name === 'CastError') {
