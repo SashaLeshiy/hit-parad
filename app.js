@@ -30,8 +30,8 @@ app.use(requestLogger);
 app.use(cors({
   origin: [
     'https://hitallica.netlify.app',
-    'http://hitallica.netlify.app',
-    'http://localhost:8080',
+    // 'http://hitallica.netlify.app',
+    // 'http://localhost:8080',
   ],
   allowedHeaders: ['Content-Type', 'Authorization',
     'Access-Control-Allow-Methods', 'Access-Control-Request-Headers',
