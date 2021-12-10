@@ -135,13 +135,14 @@ module.exports.listenCard = (req, res, next) => {
             $inc: { rating: 1 },
           },
           { new: true })
-          .then(() => {
-            if (!card) {
-              const err = new Error('Не найдено');
-              err.statusCode = 404;
-              next(err);
-            }
-          })
+          // .then(() => {
+          //   // if (!card) {
+          //   //   const err = new Error('Не найдено');
+          //   //   err.statusCode = 404;
+          //   //   next(err);
+          //   // }
+          //   res.send(card);
+          // })
           .catch((err) => {
             if (err.name === 'CastError') {
               const error = new Error('Некорректные данные');
@@ -165,13 +166,14 @@ module.exports.listenCard = (req, res, next) => {
           $set: { 'listen.$.date': Date.now() },
           $inc: { rating: 1 },
         })
-          .then(() => {
-            if (!card) {
-              const err = new Error('Не найдено');
-              err.statusCode = 404;
-              next(err);
-            }
-          })
+          // .then(() => {
+          //   // if (!card) {
+          //   //   const err = new Error('Не найдено');
+          //   //   err.statusCode = 404;
+          //   //   next(err);
+          //   // }
+          //   res.send(card);
+          // })
           .catch((err) => {
             if (err.name === 'CastError') {
               const error = new Error('Некорректные данные');
