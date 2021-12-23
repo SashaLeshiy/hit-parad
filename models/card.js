@@ -4,6 +4,9 @@ const cardSchema = new mongoose.Schema({
   title: {
     type: String,
   },
+  artist: {
+    type: String,
+  },
   link: {
     type: String,
     required: true,
