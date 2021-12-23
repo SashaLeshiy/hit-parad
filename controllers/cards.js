@@ -49,7 +49,6 @@ module.exports.createCard = (req, res, next) => {
             // eslint-disable-next-line prefer-destructuring
             title = $('.sidebar__title a').text();
             artist = $('.sidebar__info span a').first().text();
-            console.log(artist);
             image = $('.entity-cover__image').attr('src').replace(/200x200/gi, '400x400');
           })
           .then(() => {
