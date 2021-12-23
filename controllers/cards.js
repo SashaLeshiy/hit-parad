@@ -30,6 +30,7 @@ module.exports.createCard = (req, res, next) => {
   const { link } = req.body;
   const owner = req.user._id;
   let title;
+  let artist;
   let image = '';
   Card.findOne({ link })
     .then((song) => {
@@ -46,14 +47,16 @@ module.exports.createCard = (req, res, next) => {
           .then((html) => {
             const $ = cheerio.load(html);
             // eslint-disable-next-line prefer-destructuring
-            title = $('title').text().split('.')[0];
+            title = $('.sidebar__title a').text();
+            artist = $('.sidebar__info span a').first().text();
+            console.log(artist);
             image = $('.entity-cover__image').attr('src').replace(/200x200/gi, '400x400');
           })
           .then(() => {
             const songFrame = link.split(/\?|\//);
             const frameSong = `${songFrame[0]}//${songFrame[2]}/iframe/#track/${songFrame[6]}/${songFrame[4]}`;
             Card.create({
-              link, owner, title, image, frameSong,
+              link, owner, title, artist, image, frameSong,
             })
               .then((card) => {
                 res.send(card);
@@ -135,14 +138,6 @@ module.exports.listenCard = (req, res, next) => {
             $inc: { rating: 1 },
           },
           { new: true })
-          // .then(() => {
-          //   // if (!card) {
-          //   //   const err = new Error('Не найдено');
-          //   //   err.statusCode = 404;
-          //   //   next(err);
-          //   // }
-          //   res.send(card);
-          // })
           .catch((err) => {
             if (err.name === 'CastError') {
               const error = new Error('Некорректные данные');
@@ -166,14 +161,6 @@ module.exports.listenCard = (req, res, next) => {
           $set: { 'listen.$.date': Date.now() },
           $inc: { rating: 1 },
         })
-          // .then(() => {
-          //   // if (!card) {
-          //   //   const err = new Error('Не найдено');
-          //   //   err.statusCode = 404;
-          //   //   next(err);
-          //   // }
-          //   res.send(card);
-          // })
           .catch((err) => {
             if (err.name === 'CastError') {
               const error = new Error('Некорректные данные');
